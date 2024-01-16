@@ -17,3 +17,11 @@ Here is an example of the login page
 Here is a sequence diagram that shows how to people would interact with the backend to vote.
 
 ![Sequence Diagram Example](Pictures/Sequence_Diagram.jpg)
+
+### Key features
+
+- Secure login over HTTPS
+- New requests are updated in real time
+- Ability for a user to see all previous requests made by others
+- All requests are stored in a permanent database
+- Ability for admin to see and fulfill requests
