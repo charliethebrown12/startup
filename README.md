@@ -25,3 +25,17 @@ Here is a sequence diagram that shows how to people would interact with the back
 - Ability for a user to see all previous requests made by others
 - All requests are stored in a permanent database
 - Ability for admin to see and fulfill requests
+
+### Technologies
+
+I am going to use the required technologies in the following ways.
+
+- **HTML** - Uses correct HTML structure for application. A login page for creating a secure login. Two other pages to differentiate between the two media servers that exist.
+- **CSS** - Styled to look nice, fits to different sized screens appropriately
+- **JavaScript** - Allows the ability to input new requests, and the ability to switch between the two server pages.
+- **Service** - Backend service with endpoints for:
+  - login
+  - alert about new requests
+- **DB/Login** - Store users and requests in database. Register and login users. Credentials securely stored in database. Can't request unless authenticated.
+- **WebSocket** - When a request is added, pushes that new request to all users as a notification.
+- **React** - Application ported to use the React web framework.
