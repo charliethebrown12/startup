@@ -6,10 +6,14 @@ You know when you share a media server throughout your extended family and it is
 
 ### Design
 
+This is an example of the Charles' Server page with an included notification in the corner
+
 ![Media Request Page Example](Pictures/Page_Example_For_Startup.png)
 
 Here is an example of the login page
 
 ![Login Page Example](Pictures/Login_Page_For_Startup.png)
+
+Here is a sequence diagram that shows how to people would interact with the backend to vote.
 
 ![Sequence Diagram Example](Pictures/Sequence_Diagram.jpg)
