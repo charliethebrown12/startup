@@ -39,3 +39,14 @@ I am going to use the required technologies in the following ways.
 - **DB/Login** - Store users and requests in database. Register and login users. Credentials securely stored in database. Can't request unless authenticated.
 - **WebSocket** - When a request is added, pushes that new request to all users as a notification.
 - **React** - Application ported to use the React web framework.
+
+### HTML Deliverable
+
+For this deliverable I built out the structure of my application using HTML.
+
+- **HTML pages** - Three HTML pages that start with the Login page and then links to the Charles and Ryan Server pages.
+- **Links** - The Login page links to the two other server pages to differentiate between the two servers that media requests will exist for.
+- **Text** - There is text to describe who is logged in, where to put login information, and for the search bar to add movies.
+- **Images** - A Plex logo image is included towards the top of each page, because both servers are Plex servers.
+- **DB/Login** - Username text box and password input box for login. The list of previously requested movies and TV shows are listed as placeholder for the database.
+- **WebSocket** - A notification of a newly added movie that will be pushed out to all users have been added as a placeholder in the far right of the screen on the server pages.
