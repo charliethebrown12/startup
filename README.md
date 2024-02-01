@@ -42,7 +42,7 @@ I am going to use the required technologies in the following ways.
 
 ### HTML Deliverable
 
-For this deliverable I built out the structure of my application using HTML.
+For this deliverable I used HTML to build up my structure for my web application.
 
 - **HTML pages** - Three HTML pages that start with the Login page and then links to the Charles and Ryan Server pages.
 - **Links** - The Login page links to the two other server pages to differentiate between the two servers that media requests will exist for.
