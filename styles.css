@@ -1,9 +1,17 @@
-@import url('https://fonts.googleapis.com/css2?family=Sixtyfour&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,400;1,100&display=swap');
 
 .notification {
     text-align: right;
 }
 
-p {
-    font-family: "Sixtyfour"
+* {
+    font-family: 'IBM Plex Sans', sans-serif;
+}
+
+body {
+    background-color: #252525;
+}
+
+header {
+    color: rgb(219, 219, 12);
 }
