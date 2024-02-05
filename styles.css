@@ -21,13 +21,16 @@ body {
 }
 
 header {
-    flex: 0 50px;
+    flex: 0 40px;
     color: rgb(219, 219, 12);
     background-color: black;
 }
 
-img {
-    justify-self: right;
+.plex {
+    position: absolute;
+    left: 25%;
+    top: 10px;
+    justify-content: right;
 }
 
 nav {
