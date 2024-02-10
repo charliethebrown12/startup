@@ -21,16 +21,15 @@ body {
 }
 
 header {
-    flex: 0 40px;
+    flex: 0 1%;
     color: rgb(219, 219, 12);
     background-color: black;
 }
 
 .plex {
-    position: absolute;
-    left: 25%;
-    top: 10px;
-    justify-content: right;
+    display: block;
+    border-radius: 20%;
+    height: auto;
 }
 
 nav {
@@ -52,4 +51,8 @@ h1 {
 label {
     color: rgb(219, 219, 12);
     background-color: black;
+}
+
+.github {
+    justify-content: center;
 }
