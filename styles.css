@@ -44,11 +44,11 @@ nav {
     flex-direction: column;
 }
 
-label {
-    color: rgb(219, 219, 12);
-    background-color: black;
+.github {
+    left: 50%;
+    justify-items: center;
 }
 
-.github {
-    justify-content: center;
+footer {
+    flex: 0 100px;
 }
