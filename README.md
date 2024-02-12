@@ -14,7 +14,7 @@ Here is an example of the login page
 
 ![Login Page Example](Pictures/Login_Page_For_Startup.png)
 
-Here is a sequence diagram that shows how to people would interact with the backend to vote.
+Here is a sequence diagram that shows how the backend interacts with the user to show notifications caused by another user.
 
 ![Sequence Diagram Example](Pictures/Sequence_Diagram.jpg)
 
@@ -50,3 +50,14 @@ For this deliverable I used HTML to build up my structure for my web application
 - **Images** - A Plex logo image is included towards the top of each page, because both servers are Plex servers.
 - **DB/Login** - Username text box and password input box for login. The list of previously requested movies and TV shows are listed as placeholder for the database.
 - **WebSocket** - A notification of a newly added movie that will be pushed out to all users have been added as a placeholder in the far right of the screen on the server pages.
+
+### CSS Deliverable
+
+For this deliverable I properly styled the application to look how I want it to look.
+
+- **Header, footer, and main content body** - All of these three sections have been styled appropriately.
+- **Navigation elements** - Added several card elements to display the movie information as well as a placeholder for the notification box that will be changed in the future
+- **Responsive to window resizing** - Looks great at all sizes and changes the notification bar when the width is at a mobile device screen size.
+- **Application elements** - Used good contrast in colors to match the aesthetic I was aiming for and used appropriate spacing to make page look appealing.
+- **Application text content** - Consistent fonts and sizing
+- **Application images** - Styled plex logo image to fit in the corner of the navbar to look like a logo in the corner of the webpage
