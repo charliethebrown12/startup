@@ -1,7 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,400;1,100&display=swap');
 
 .notification {
-    text-align: right;
+    position: fixed;
+    bottom: 0;
+    right: 0;
 }
 
 * {
@@ -18,7 +20,7 @@ body {
 
 header {
     flex: 0;
-    color: rgb(219, 219, 12);
+    color: rgb(206, 206, 0);
     background-color: black;
 }
 
