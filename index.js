@@ -16,5 +16,19 @@ function saveLoginInfo(event) {
     }
 }
 
+function secretMessage() {
+    const secrets = [
+        "There's always another secret", 
+        "Because I'm Batman", 
+        "I will not lie by saying every day will be sunshine. But there will be sunshine again, and that is a very different thing to say. That is truth. I promise you, you will be warm again", 
+        "Super Easy, Barely An Inconvenience"
+    ]
+
+    const randomIndex = Math.floor(Math.random() * secrets.length);
+
+    // Access the message at the random index and display it in an alert
+    alert(secrets[randomIndex]);
+}
+
 // Event listeners for sign-in and sign-up buttons
 document.querySelector("form").addEventListener("submit", saveLoginInfo);
