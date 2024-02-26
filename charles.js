@@ -2,7 +2,8 @@ const urlParams = new URLSearchParams(window.location.search);
 const username = urlParams.get('username');
 
 if (username === null) {
-  alert("Please Login")
+  //alert("Please Login")
+  //window.location.href = "index.html";
 }
 document.querySelector(".yourusername").textContent = "Welcome " + username;
 

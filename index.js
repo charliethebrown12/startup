@@ -10,8 +10,6 @@ function saveLoginInfo(event) {
         // Show error alert
         alert("Please fill in all fields.");
     } else {
-        // Continue with saving login information
-        // You can add your logic here to save the login information
         window.location.href = "charles.html?username=" + encodeURIComponent(username);
     }
 }
