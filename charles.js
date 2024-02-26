@@ -126,18 +126,16 @@ function deleteCard(cardElement) {
   }
 }
 
-
-function handleDeleteButtonClick(event) {
-  // Get the card element associated with the delete button
-  let cardElement = event.target.closest(".card");
-
-  // Call the deleteCard function to delete the card
-  deleteCard(cardElement);
-}
-
 // Attach event listeners to all delete buttons
-document.querySelectorAll(".delete-button").forEach(function(button) {
-  button.addEventListener("click", handleDeleteButtonClick);
+// Attach event listener to a parent element that exists when the page loads
+document.addEventListener("click", function(event) {
+  if (event.target.classList.contains("delete-button")) {
+      // Get the card element associated with the delete button
+      let cardElement = event.target.closest(".card");
+
+      // Call the deleteCard function to delete the card
+      deleteCard(cardElement);
+  }
 });
 
 // Call the function to display saved cards when the page loads
