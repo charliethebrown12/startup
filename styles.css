@@ -52,7 +52,11 @@ footer {
 }
 
 .card {
-    margin-bottom: 30px;
+    margin-bottom: 20px;
+}
+
+.card > div {
+    position: relative;
 }
 
 .notification-bar {
@@ -63,4 +67,15 @@ footer {
     color: #fff;
     padding: 10px;
     display: none;
+}
+
+.delete-button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    color: rgb(206, 206, 0);
 }
