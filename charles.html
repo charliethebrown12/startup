@@ -28,41 +28,16 @@
           <div class="col-md-6">
             <form>
               <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Search for TV shows and Movies to add" aria-label="Search" aria-describedby="button-addon2">
-                <button class="btn btn-outline-primary" type="search" id="button-addon2">Search</button>
+                <input id="searchcontent" type="text" class="form-control" placeholder="Search for TV shows and Movies to add" aria-label="Search" aria-describedby="button-addon2">
+                <button class="btn btn-outline-primary" type="search" id="button-addon2" onclick="searchAndAddContent()">Search</button>
               </div>
             </form>
           </div>
         </div>
       </div>
-      <div class="container">
-      <div class="card text-center bg-warning text-dark col-sm">
-        <div>
-          <h5 class="card-title">The Princess Bride</h5>
-            <p class="card-text">Release: 1987 <br> PG <br> 1 hr 38 min</p>
-        </div>
-      </div>
-      </div>
-      <br>
-      <div class="container">
-        <div class="card text-center bg-warning text-dark col-sm">
-          <div>
-            <h5 class="card-title">The Lord of the Rings: Return of the King</h5>
-              <p class="card-text">Release: 2003 <br> PG-13 <br> 3 hr 21 min</p>
-          </div>
-        </div>
-        </div>
-        <br>
-        <div class="container">
-            <div class="card text-center bg-warning text-dark col-sm">
-              <div>
-                <h5 class="card-title">Batman: The Dark Knight Returns</h5>
-                  <p class="card-text">Release: 2013 <br> PG-13 <br> 2 hr 28 min</p>
-              </div>
-            </div>
-            </div>
+      <div id="cardContainer" class="container">
+        
     </div>
-    <br>
     <div class="container-fluid row">
         <div class="col-sm-7"></div>
         <div class="card col-sm-5 bg-primary text-light">
@@ -72,6 +47,7 @@
           </div>
         </div>
         </div>
+        <script src="charles.js"></script>
 </body>
 <footer class="github">
     <a href="https://github.com/charliethebrown12/startup">Github</a>

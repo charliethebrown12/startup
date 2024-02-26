@@ -50,3 +50,7 @@ nav {
 footer {
     flex: 0 100px;
 }
+
+.card {
+    margin-bottom: 30px;
+}
