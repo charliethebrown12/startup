@@ -1,3 +1,11 @@
+const urlParams = new URLSearchParams(window.location.search);
+const username = urlParams.get('username');
+
+if (username === null) {
+  alert("Please Login")
+}
+document.querySelector(".yourusername").textContent = "Welcome " + username;
+
 function showNotification(message) {
   let notificationBar = document.getElementById("notificationBar");
   notificationBar.innerText = message;
