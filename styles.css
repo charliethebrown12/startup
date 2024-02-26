@@ -54,3 +54,13 @@ footer {
 .card {
     margin-bottom: 30px;
 }
+
+.notification-bar {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    background-color: #100ce6;
+    color: #fff;
+    padding: 10px;
+    display: none;
+}
