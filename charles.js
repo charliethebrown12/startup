@@ -5,31 +5,27 @@ if (username === null) {
   //alert("Please Login")
   //window.location.href = "index.html";
 }
-document.querySelector(".yourusername").textContent = "Welcome " + username;
 
 function showNotification(message) {
   let notificationBar = document.getElementById("notificationBar");
   notificationBar.innerText = message;
   notificationBar.style.display = "block";
 
-  // Hide the notification after 10 seconds
+
   setTimeout(function() {
       notificationBar.style.display = "none";
-  }, 10000); // 10 seconds
+  }, 10000);
 }
 
-// Function to create and add a card based on search input
 function searchAndAddContent(event) {
 
   event.preventDefault();
 
   let searchInput = document.getElementById("searchcontent").value;
 
-  // Create a new div element with Bootstrap card classes
   let cardDiv = document.createElement("div");
   cardDiv.classList.add("card", "text-center", "bg-warning", "text-dark", "col-sm");
 
-  // Set card content based on search input
   cardDiv.innerHTML = `
       <div>
           <h5 class="card-title">${searchInput}</h5>
@@ -37,7 +33,6 @@ function searchAndAddContent(event) {
           <button class="delete-button">x</button>
       </div>`;
 
-  // Append the card to the container
   document.getElementById("cardContainer").appendChild(cardDiv);
 
   showNotification("New item added: " + searchInput);
@@ -73,37 +68,32 @@ function secretMessage() {
 
   const randomIndex = Math.floor(Math.random() * secrets.length);
 
-  // Access the message at the random index and display it in an alert
   alert(secrets[randomIndex]);
 }
 
 function saveCardsToLocalStorage() {
-  // Get all card elements
+  let localStorageKey = "savedCards_" + window.location.pathname;
+
   let cards = document.querySelectorAll(".card");
 
-  // Initialize an array to store card content
   let cardContent = [];
 
-  // Loop through each card element and extract its content
   cards.forEach(function(card) {
       let title = card.querySelector(".card-title").innerText;
       let text = card.querySelector(".card-text").innerText;
 
-      // Push the card content into the array
       cardContent.push({ title: title, text: text });
   });
 
-  // Store the card content array in localStorage
-  localStorage.setItem("savedCards", JSON.stringify(cardContent));
+  localStorage.setItem(localStorageKey, JSON.stringify(cardContent));
 }
 
-// Function to retrieve cards from localStorage and display them on the page
 function displayCardsFromLocalStorage() {
-  // Retrieve the card content array from localStorage
-  let savedCards = JSON.parse(localStorage.getItem("savedCards"));
+  let localStorageKey = "savedCards_" + window.location.pathname;
+
+  let savedCards = JSON.parse(localStorage.getItem(localStorageKey));
 
   if (savedCards) {
-      // Loop through the saved cards and create card elements on the page
       savedCards.forEach(function(cardData) {
           let cardDiv = document.createElement("div");
           cardDiv.classList.add("card", "text-center", "bg-warning", "text-dark", "col-sm");
@@ -118,19 +108,38 @@ function displayCardsFromLocalStorage() {
   }
 }
 
-function deleteCard(cardElement) {
-  // Check if the card element exists
-  if (cardElement && cardElement.parentNode) {
-      // Remove the card element from its parent node
-      cardElement.parentNode.removeChild(cardElement);
+function removeCardDataFromLocalStorage(cardElement) {
+  let localStorageKey = "savedCards_" + window.location.pathname;
+
+  let cardTitle = cardElement.querySelector(".card-title").innerText;
+
+  let savedCards = JSON.parse(localStorage.getItem(localStorageKey));
+
+  if (savedCards) {
+    let cardTitle = cardElement.querySelector(".card-title").innerText;
+      // Find the index of the card with the matching title
+      let index = savedCards.findIndex(card => card.title === cardTitle);
+
+      if (index !== -1) {
+          // Remove the card data from the savedCards array
+          savedCards.splice(index, 1);
+
+          localStorage.setItem(localStorageKey, JSON.stringify(savedCards));
+      }
   }
 }
 
-// Attach event listeners to all delete buttons
-// Attach event listener to a parent element that exists when the page loads
+function deleteCard(cardElement) {
+  if (cardElement && cardElement.parentNode) {
+
+    cardElement.parentNode.removeChild(cardElement);
+
+      removeCardDataFromLocalStorage(cardElement);
+  }
+}
+
 document.addEventListener("click", function(event) {
   if (event.target.classList.contains("delete-button")) {
-      // Get the card element associated with the delete button
       let cardElement = event.target.closest(".card");
 
       // Call the deleteCard function to delete the card
@@ -138,7 +147,7 @@ document.addEventListener("click", function(event) {
   }
 });
 
-// Call the function to display saved cards when the page loads
+document.querySelector(".yourusername").textContent = "Welcome " + username;
+
 window.addEventListener("load", displayCardsFromLocalStorage);
 
-// Event listener for the search button click
