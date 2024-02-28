@@ -61,3 +61,12 @@ For this deliverable I properly styled the application to look how I want it to 
 - **Application elements** - Used good contrast in colors to match the aesthetic I was aiming for and used appropriate spacing to make page look appealing.
 - **Application text content** - Consistent fonts and sizing
 - **Application images** - Styled plex logo image to fit in the corner of the navbar to look like a logo in the corner of the webpage
+
+### Javascript Deliverable
+
+I implemented this deliverable in JavaScript so that the application works for a single user. I also added placeholders for future technology.
+
+ - **Login** - When you input the email, username, and password on the login page, it saves the username and displays it on the Charles server page which it immediately takes you to.
+- **Database** - When the search bar is clicked, it automatically saves the information stored there and displays it as a card that remains in the localStorage data for that user.
+- **WebSocket** - When the search button is clicked, not only does it display a new card but shows a notification in the corner of the page that appears for 10 seconds and in the future will display for all users.
+- **Application logic** - The information inserted into the new cards is based upon what the user inputs in the search bar and later will get the information from an API for movies but is still based on what the user wants.
