@@ -1,6 +1,70 @@
 const urlParams = new URLSearchParams(window.location.search);
 const username = urlParams.get('username');
 
+// Your previous API code
+const tmdbApiKey = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkNmI3NTBhMzNlZGIxYzk4YTMyY2QwN2MzZjBiY2VlYSIsInN1YiI6IjY1ZTRhYmE2OWVlMGVmMDE2MjZmOTlhYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.YHuoKQKx58uyOuKVm6HQqtkwnDpdveBskk2GG2M9KwU';
+const tmdbApiUrl = 'https://api.themoviedb.org/3/search/multi';
+
+async function searchTMDB(query) {
+    const options = {
+        method: 'GET',
+        headers: {
+            accept: 'application/json',
+            Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkNmI3NTBhMzNlZGIxYzk4YTMyY2QwN2MzZjBiY2VlYSIsInN1YiI6IjY1ZTRhYmE2OWVlMGVmMDE2MjZmOTlhYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.YHuoKQKx58uyOuKVm6HQqtkwnDpdveBskk2GG2M9KwU'
+        } 
+    };
+
+    const apiUrl = `${tmdbApiUrl}?include_adult=false&language=en-US&page=1&query=${encodeURIComponent(query)}`;
+
+  
+    try {
+      const response = await fetch(apiUrl, options);
+      const responseData = await response.json();
+      displayResults(responseData);
+  } catch (error) {
+      console.error('Error:', error);
+  }
+}
+
+function displayResults(data) {
+    const resultsContainer = document.getElementById('cardContainer');
+    resultsContainer.innerHTML = '';
+
+    if (data.results.length > 0) {
+      const result = data.results[0]; // Get the first result
+
+      const title = result.title || result.name; // Movie title or TV show name
+      const releaseYear = result.release_date ? new Date(result.release_date).getFullYear() : '' || result.first_air_date ? new Date(result.first_air_date).getFullYear() : '';
+      const overview = result.overview;
+
+        let cardDiv = document.createElement("div");
+        cardDiv.classList.add("card", "text-center", "bg-warning", "text-dark", "col-sm");
+      
+        cardDiv.innerHTML = `
+            <div>
+                <h5 class="card-title">${title}</h5>
+                <p class="card-text">${releaseYear}</p>
+                <p class="card-text overview">${overview}</p>
+                <button class="delete-button">x</button>
+            </div>`;
+      
+        document.getElementById("cardContainer").appendChild(cardDiv);
+
+        showNotification("New item added: " + title);
+
+        saveCardsToLocalStorage();
+      
+    };
+}
+
+document.getElementById('button-addon2').addEventListener('click', function(event) {
+  event.preventDefault();
+    const query = document.getElementById('searchInput').value;
+    searchTMDB(query);
+});
+
+
+
 if (username === null) {
   //alert("Please Login")
   //window.location.href = "index.html";
@@ -81,8 +145,9 @@ function saveCardsToLocalStorage() {
   cards.forEach(function(card) {
       let title = card.querySelector(".card-title").innerText;
       let text = card.querySelector(".card-text").innerText;
+      let overview = card.querySelector(".overview").innerText;
 
-      cardContent.push({ title: title, text: text });
+      cardContent.push({ title: title, text: text, overview: overview});
   });
 
   localStorage.setItem(localStorageKey, JSON.stringify(cardContent));
@@ -101,6 +166,7 @@ function displayCardsFromLocalStorage() {
               <div>
                   <h5 class="card-title">${cardData.title}</h5>
                   <p class="card-text">${cardData.text}</p>
+                  <p class="card-text overview">${cardData.overview}</p>
                   <button class="delete-button">x</button>
               </div>`;
           document.getElementById("cardContainer").appendChild(cardDiv);
