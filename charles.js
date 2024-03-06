@@ -5,7 +5,10 @@ const username = urlParams.get('username');
 const tmdbApiKey = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkNmI3NTBhMzNlZGIxYzk4YTMyY2QwN2MzZjBiY2VlYSIsInN1YiI6IjY1ZTRhYmE2OWVlMGVmMDE2MjZmOTlhYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.YHuoKQKx58uyOuKVm6HQqtkwnDpdveBskk2GG2M9KwU';
 const tmdbApiUrl = 'https://api.themoviedb.org/3/search/multi';
 
-async function searchTMDB(query) {
+document.getElementById("searchInput").addEventListener('input', debounce(searchTMDB, 500));
+
+async function searchTMDB() {
+  const query = document.getElementById("searchInput").value;
     const options = {
         method: 'GET',
         headers: {
@@ -20,41 +23,78 @@ async function searchTMDB(query) {
     try {
       const response = await fetch(apiUrl, options);
       const responseData = await response.json();
-      displayResults(responseData);
+      displaySearchResults(responseData);
   } catch (error) {
       console.error('Error:', error);
   }
 }
 
-function displayResults(data) {
-    const resultsContainer = document.getElementById('cardContainer');
-    resultsContainer.innerHTML = '';
+function displaySearchResults(data) {
+  const searchResultsSelect = document.getElementById('searchResults');
+  searchResultsSelect.style.display = 'block';
+  searchResultsSelect.innerHTML = '<option value="">Select an option</option>'; // Add a default option
 
-    if (data.results.length > 0) {
-      const result = data.results[0]; // Get the first result
-
+  data.results.forEach(result => {
       const title = result.title || result.name; // Movie title or TV show name
       const releaseYear = result.release_date ? new Date(result.release_date).getFullYear() : '' || result.first_air_date ? new Date(result.first_air_date).getFullYear() : '';
-      const overview = result.overview;
+      const overview  = result.overview;
 
-        let cardDiv = document.createElement("div");
-        cardDiv.classList.add("card", "text-center", "bg-warning", "text-dark", "col-sm");
-      
-        cardDiv.innerHTML = `
-            <div>
-                <h5 class="card-title">${title}</h5>
-                <p class="card-text">${releaseYear}</p>
-                <p class="card-text overview">${overview}</p>
-                <button class="delete-button">x</button>
-            </div>`;
-      
-        document.getElementById("cardContainer").appendChild(cardDiv);
+      let option = document.createElement("option");
+      option.value = title;
+      option.overview = overview;
+      option.text = `${title} (${releaseYear})`; 
 
-        showNotification("New item added: " + title);
+      searchResultsSelect.appendChild(option);
+  });
 
-        saveCardsToLocalStorage();
-      
-    };
+  searchResultsSelect.addEventListener('change', function() {
+      const selectedOption = this.value;
+      if (selectedOption) {
+        const selectedIndex = this.selectedIndex;
+        const selectedResult = searchResults[selectedIndex]; // Adjust index for default option
+        const title = selectedResult.label || selectedResult.name;
+        const releaseYear = selectedResult.release_date ? new Date(selectedResult.release_date).getFullYear() : '' || selectedResult.first_air_date ? new Date(selectedResult.first_air_date).getFullYear() : '';
+        const overview = selectedResult.overview;
+      createCard(title, releaseYear, overview);
+      this.style.display = 'none';
+      this.innerHTML = '';
+      document.getElementById('searchInput').value = ''; // Clear search input
+      }
+  });
+}
+
+function createCard(title, releaseYear, overview) {
+  const cardContainer = document.getElementById("cardContainer");
+
+  let cardDiv = document.createElement("div");
+  cardDiv.classList.add("card", "text-center", "bg-warning", "text-dark", "col-sm");
+
+  cardDiv.innerHTML = `
+    <div>
+      <h5 class="card-title">${title}</h5>
+      <p class="card-text">${releaseYear}</p>
+      <p class="card-text overview">${overview}</p>
+      <button class="delete-button">x</button>
+    </div>`;
+
+  document.getElementById("cardContainer").appendChild(cardDiv);
+
+  showNotification("New item added: " + title);
+
+  saveCardsToLocalStorage();
+
+}
+
+function debounce(func, wait) {
+  let timeout;
+  return function() {
+      const context = this,
+          args = arguments;
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
+          func.apply(context, args);
+      }, wait);
+  };
 }
 
 document.getElementById('button-addon2').addEventListener('click', function(event) {
