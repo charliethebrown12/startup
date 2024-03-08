@@ -1,34 +1,6 @@
 const urlParams = new URLSearchParams(window.location.search);
 const username = urlParams.get('username');
 
-// Your previous API code
-const tmdbApiKey = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkNmI3NTBhMzNlZGIxYzk4YTMyY2QwN2MzZjBiY2VlYSIsInN1YiI6IjY1ZTRhYmE2OWVlMGVmMDE2MjZmOTlhYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.YHuoKQKx58uyOuKVm6HQqtkwnDpdveBskk2GG2M9KwU';
-const tmdbApiUrl = 'https://api.themoviedb.org/3/search/multi';
-
-document.getElementById("searchInput").addEventListener('input', debounce(searchTMDB, 500));
-
-async function searchTMDB() {
-  const query = document.getElementById("searchInput").value;
-    const options = {
-        method: 'GET',
-        headers: {
-            accept: 'application/json',
-            Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkNmI3NTBhMzNlZGIxYzk4YTMyY2QwN2MzZjBiY2VlYSIsInN1YiI6IjY1ZTRhYmE2OWVlMGVmMDE2MjZmOTlhYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.YHuoKQKx58uyOuKVm6HQqtkwnDpdveBskk2GG2M9KwU'
-        } 
-    };
-
-    const apiUrl = `${tmdbApiUrl}?include_adult=false&language=en-US&page=1&query=${encodeURIComponent(query)}`;
-
-  
-    try {
-      const response = await fetch(apiUrl, options);
-      const responseData = await response.json();
-      displaySearchResults(responseData);
-  } catch (error) {
-      console.error('Error:', error);
-  }
-}
-
 function displaySearchResults(data) {
   const searchResultsSelect = document.getElementById('searchResults');
   searchResultsSelect.style.display = 'block';
@@ -97,10 +69,16 @@ function debounce(func, wait) {
   };
 }
 
-document.getElementById('button-addon2').addEventListener('click', function(event) {
+document.getElementById('button-addon2').addEventListener('click', async function(event) {
   event.preventDefault();
-    const query = document.getElementById('searchInput').value;
-    searchTMDB(query);
+  const query = document.getElementById('searchInput').value;
+  try {
+      const response = await fetch(`/api/search?query=${encodeURIComponent(query)}`);
+      const data = await response.json();
+      displaySearchResults(data);
+  } catch (error) {
+      console.error('Error:', error);
+  }
 });
 
 

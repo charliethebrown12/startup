@@ -10,9 +10,30 @@ function saveLoginInfo(event) {
         // Show error alert
         alert("Please fill in all fields.");
     } else {
-        window.location.href = "charles.html?username=" + encodeURIComponent(username);
+        fetch('/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, username, password })
+        })
+        .then(response => {
+            if (response.ok) {
+                // Redirect to charles.html with username as a query parameter
+                window.location.href = `charles.html?username=${encodeURIComponent(username)}`;
+            } else {
+                // Show error alert
+                alert("Invalid email/username or password.");
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            // Show error alert
+            alert("An error occurred. Please try again.");
+        });
     }
 }
+
 
 function secretMessage() {
     const secrets = [
