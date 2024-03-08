@@ -32,6 +32,11 @@ const options = {
 
 });
 
+const users = [
+  { id: 1, email: 'cab03@gmail.com', username: 'butler', password: '1234' },
+  { id: 2, email: 'ashley@gmail.com', username: 'ashley', password: 'cheese' }
+];
+
 app.post('/login', (req, res) => {
   const { email, username, password } = req.body;
 

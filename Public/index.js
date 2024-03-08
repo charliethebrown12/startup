@@ -10,6 +10,7 @@ function saveLoginInfo(event) {
         // Show error alert
         alert("Please fill in all fields.");
     } else {
+        sessionStorage.setItem('username', username);
         fetch('/login', {
             method: 'POST',
             headers: {

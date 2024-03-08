@@ -1,6 +1,3 @@
-const urlParams = new URLSearchParams(window.location.search);
-const username = urlParams.get('username');
-
 function displaySearchResults(data) {
   const searchResultsSelect = document.getElementById('searchResults');
   searchResultsSelect.style.display = 'block';
@@ -80,13 +77,6 @@ document.getElementById('button-addon2').addEventListener('click', async functio
       console.error('Error:', error);
   }
 });
-
-
-
-if (username === null) {
-  //alert("Please Login")
-  //window.location.href = "index.html";
-}
 
 function showNotification(message) {
   let notificationBar = document.getElementById("notificationBar");
@@ -231,7 +221,17 @@ document.addEventListener("click", function(event) {
   }
 });
 
-document.querySelector(".yourusername").textContent = "Welcome " + username;
+const savedUsername = sessionStorage.getItem('username');
+
+if (savedUsername === null) {
+  alert("Please Login")
+  window.location.href = "index.html";
+}
+
+document.querySelectorAll(".yourusername").forEach(element => {
+    element.textContent = "Welcome " + savedUsername;
+});
+
 
 window.addEventListener("load", displayCardsFromLocalStorage);
 
