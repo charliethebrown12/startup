@@ -19,7 +19,7 @@ printf "\n----> Deploying $service to $hostname with $key\n"
 printf "\n----> Build the distribution package\n"
 rm -rf dist
 mkdir dist
-cp -r public dist
+cp -r Public dist
 cp *.js dist
 cp *.json dist
 

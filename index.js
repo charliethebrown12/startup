@@ -1,6 +1,5 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const path = require('path');
 const fetch = require('node-fetch');
 
 const app = express();
@@ -57,7 +56,11 @@ function generateAuthToken(user) {
   return 'placeholder-auth-token';
 }
 
-const PORT = process.env.PORT || 3000;
+app.use((_req, res) => {
+  res.sendFile('index.html', { root: 'Public' });
+});
+
+const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
