@@ -24,6 +24,7 @@ function displaySearchResults(data) {
         const title = selectedResult.label || selectedResult.name;
         const releaseYear = selectedResult.release_date ? new Date(selectedResult.release_date).getFullYear() : '' || selectedResult.first_air_date ? new Date(selectedResult.first_air_date).getFullYear() : '';
         const overview = selectedResult.overview;
+        addtoDatabase(title, overview);
       createCard(title, releaseYear, overview);
       this.style.display = 'none';
       this.innerHTML = '';
@@ -31,6 +32,66 @@ function displaySearchResults(data) {
       }
   });
 }
+
+function addtoDatabase(movieTitle, overview) {
+  const movieData = {
+    title: movieTitle,
+    summary: overview
+  };
+  fetch('/api/movies', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(movieData)
+  })
+  .then(response => {
+    if (response.ok) {
+      console.log('Movie added successfully');
+      // Handle success
+    } else {
+      console.error('Error adding movie:', response.statusText);
+      // Handle error
+    }
+  })
+  .catch(error => {
+    console.error('Error adding movie:', error);
+    // Handle error
+  });
+}
+
+async function fetchMovies() {
+  try {
+    const response = await fetch('/api/movies');
+    if (!response.ok) {
+      throw new Error('Failed to fetch movies');
+    }
+    const movies = await response.json();
+    return movies;
+  } catch (error) {
+    console.error('Error fetching movies:', error);
+    return [];
+  }
+}
+
+// Render movies on the page
+async function renderMovies() {
+  const moviesContainer = document.getElementById('cardContainer');
+  const movies = await fetchMovies();
+  movies.forEach(movie => {
+    let cardDiv = document.createElement("div");
+    cardDiv.classList.add("card", "text-center", "bg-warning", "text-dark", "col-sm");
+    cardDiv.innerHTML = `
+    <div>
+      <h5 class="card-title">${movie.title}</h5>
+      <p class="card-text">${movie.year}</p>
+      <p class="card-text overview">${movie.summary}</p>
+      <button class="delete-button" id="${movie._id}">x</button>
+    </div>`;
+    moviesContainer.appendChild(cardDiv);
+  });
+}
+
 
 function createCard(title, releaseYear, overview) {
   const cardContainer = document.getElementById("cardContainer");
@@ -182,6 +243,21 @@ function displayCardsFromLocalStorage() {
   }
 }
 
+async function deleteCardFromDatabase(movieId) {
+  try {
+    const response = await fetch(`/api/movies/${movieId}`, {
+      method: 'DELETE'
+    });
+    if (!response.ok) {
+      throw new Error('Failed to delete movie');
+    }
+    console.log('Movie deleted successfully');
+  } catch (error) {
+    console.error('Error deleting movie:', error);
+  }
+}
+
+
 function removeCardDataFromLocalStorage(cardElement) {
   let localStorageKey = "savedCards_" + window.location.pathname;
 
@@ -215,9 +291,11 @@ function deleteCard(cardElement) {
 document.addEventListener("click", function(event) {
   if (event.target.classList.contains("delete-button")) {
       let cardElement = event.target.closest(".card");
+      let movieId = event.target.getAttribute('id');
 
       // Call the deleteCard function to delete the card
       deleteCard(cardElement);
+      deleteCardFromDatabase(movieId);
   }
 });
 
@@ -235,3 +313,4 @@ document.querySelectorAll(".yourusername").forEach(element => {
 
 window.addEventListener("load", displayCardsFromLocalStorage);
 
+window.addEventListener('load', renderMovies);
