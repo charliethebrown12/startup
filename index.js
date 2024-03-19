@@ -78,7 +78,7 @@ app.delete('/api/movies/:id', async (req, res) => {
   const movieId = req.params.id;
   try {
     const collection = db.collection('charles');
-    const result = await collection.deleteOne({ _id: ObjectId(movieId) });
+    const result = await collection.deleteOne({ title: movieId });
     if (result.deletedCount === 1) {
       res.status(200).json({ message: 'Movie deleted successfully' });
     } else {

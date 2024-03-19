@@ -86,7 +86,7 @@ async function renderMovies() {
       <h5 class="card-title">${movie.title}</h5>
       <p class="card-text">${movie.year}</p>
       <p class="card-text overview">${movie.summary}</p>
-      <button class="delete-button" id="${movie._id}">x</button>
+      <button class="delete-button" id="${movie.title}">x</button>
     </div>`;
     moviesContainer.appendChild(cardDiv);
   });
