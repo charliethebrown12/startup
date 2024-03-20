@@ -38,7 +38,7 @@ function addtoDatabase(movieTitle, overview) {
     title: movieTitle,
     summary: overview
   };
-  fetch('/api/movies', {
+  fetch('/api/movies/charles', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -62,7 +62,7 @@ function addtoDatabase(movieTitle, overview) {
 
 async function fetchMovies() {
   try {
-    const response = await fetch('/api/movies');
+    const response = await fetch('/api/movies/charles');
     if (!response.ok) {
       throw new Error('Failed to fetch movies');
     }
@@ -245,7 +245,7 @@ function displayCardsFromLocalStorage() {
 
 async function deleteCardFromDatabase(movieId) {
   try {
-    const response = await fetch(`/api/movies/${movieId}`, {
+    const response = await fetch(`/api/movies/charles/${movieId}`, {
       method: 'DELETE'
     });
     if (!response.ok) {
