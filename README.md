@@ -70,3 +70,13 @@ I implemented this deliverable in JavaScript so that the application works for a
 - **Database** - When the search bar is clicked, it automatically saves the information stored there and displays it as a card that remains in the localStorage data for that user.
 - **WebSocket** - When the search button is clicked, not only does it display a new card but shows a notification in the corner of the page that appears for 10 seconds and in the future will display for all users.
 - **Application logic** - The information inserted into the new cards is based upon what the user inputs in the search bar and later will get the information from an API for movies but is still based on what the user wants.
+
+### Service Deliverable
+
+For this deliverable, I added backend endpoints that call information for the search bar to access movie information
+
+- **Node.js/Express HTTP service** - created my service using node.js and express
+- **Static middleware for frontend** - created static middleware for the frontend
+- **Calls to third-party endpoints** - calls the MovieDB API to get results using the information entered into the search bar
+- **Backend service endpoints** - Placeholders for login information that stores the current user on the server
+- **Frontend calls service endpoints** - I did this using the fetch function
