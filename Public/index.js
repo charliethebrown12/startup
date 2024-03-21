@@ -1,40 +1,60 @@
-function saveLoginInfo(event) {
-
-    event.preventDefault(); // Prevent form submission
-
+async function signup() {
     let email = document.getElementById("useremail").value;
     let username = document.getElementById("username").value;
     let password = document.getElementById("userpassword").value;
-
-    if (email === '' || username === '' || password === '') {
-        // Show error alert
-        alert("Please fill in all fields.");
-    } else {
-        sessionStorage.setItem('username', username);
-        fetch('/login', {
+    try {
+        const response = await fetch('/signup', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({ email, username, password })
-        })
-        .then(response => {
-            if (response.ok) {
-                // Redirect to charles.html with username as a query parameter
-                window.location.href = `charles.html?username=${encodeURIComponent(username)}`;
-            } else {
-                // Show error alert
-                alert("Invalid email/username or password.");
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            // Show error alert
-            alert("An error occurred. Please try again.");
         });
+        
+        if (response.ok) {
+            alert('Sign up successful! Please log in.');
+            window.location.href = `charles.html?username=${encodeURIComponent(username)}`;
+        } else {
+            const data = await response.json();
+            alert(data.message);
+        }
+    } catch (error) {
+        console.error('Error signing up:', error);
+        alert('An error occurred. Please try again.');
     }
 }
 
+async function login() {
+    let email = document.getElementById("useremail").value;
+    let username = document.getElementById("username").value;
+    let password = document.getElementById("userpassword").value;
+    try {
+        const response = await fetch('/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, password })
+        });
+        
+        if (response.ok) {
+            window.location.href = `charles.html?username=${encodeURIComponent(username)}`;
+            const data = await response.json();
+            const authToken = data.authToken;
+            // Save authToken to localStorage or session storage
+            localStorage.setItem('authToken', authToken);
+            alert('Login successful!');
+            // Optionally, redirect to protected page
+            // window.location.href = '/protected.html';
+        } else {
+            const data = await response.json();
+            alert(data.message);
+        }
+    } catch (error) {
+        console.error('Error logging in:', error);
+        alert('An error occurred. Please try again.');
+    }
+}
 
 function secretMessage() {
     const secrets = [
@@ -68,4 +88,5 @@ function secretMessage() {
 }
 
 // Event listeners for sign-in and sign-up buttons
-document.querySelector("form").addEventListener("submit", saveLoginInfo);
+document.querySelector(".btn-outline-warning").addEventListener("click", login);
+document.querySelector(".btn-outline-success").addEventListener("click", signup);

@@ -18,6 +18,72 @@ const url = `mongodb+srv://${config.userName}:${config.password}@${config.hostna
 const client = new MongoClient(url);
 const dbName = 'startup';
 
+app.post('/signup', async (req, res) => {
+  const { email, username, password } = req.body;
+
+  try {
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Check if the email or username is already registered
+    const existingUser = await db.collection('users').findOne({ $or: [{ email }, { username }] });
+    if (existingUser) {
+      return res.status(400).json({ message: 'Email or username already exists' });
+    }
+
+    // Save user to the database
+    await db.collection('users').insertOne({ email, username, password: hashedPassword });
+    res.status(201).json({ message: 'User created successfully' });
+  } catch (error) {
+    console.error('Error signing up user:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+// Endpoint for user sign-in
+app.post('/login', async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    // Find user by email
+    const user = await db.collection('users').findOne({ email });
+    if (!user) {
+      return res.status(401).json({ message: 'Invalid email or password' });
+    }
+
+    // Check if password is correct
+    const passwordMatch = await bcrypt.compare(password, user.password);
+    if (!passwordMatch) {
+      return res.status(401).json({ message: 'Invalid email or password' });
+    }
+
+    // Generate unique session token using UUID
+    const authToken = uuid.v4();
+
+    // Save session token in the database
+    req.session.sessionId = sessionId;
+    res.cookie('sessionId', sessionId, { httpOnly: true });
+
+    res.json({ success: true, authToken });
+  } catch (error) {
+    console.error('Error logging in user:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+// Placeholder: Protect endpoints with authentication middleware
+
+app.get('/check-auth', (req, res) => {
+  // Check if session ID cookie exists
+  if (req.cookies.sessionId && req.session.sessionId === req.cookies.sessionId) {
+    // User is authenticated
+    res.json({ authenticated: true, user: req.session.user });
+  } else {
+    // User is not authenticated
+    res.json({ authenticated: false });
+  }
+});
+
 app.get('/api/search', async (req, res) => {
 const query = req.query.query;
 const apiUrl = `${tmdbApiUrl}?include_adult=false&language=en-US&page=1&query=${encodeURIComponent(query)}`;
@@ -39,17 +105,6 @@ const options = {
 }
 
 });
-
-(async function connectToDB() {
-  try {
-    const client = new MongoClient(url);
-    await client.connect();
-    console.log('Connected to MongoDB');
-    db = client.db(dbName);
-  } catch (error) {
-    console.error('Error connecting to MongoDB:', error);
-  }
-})();
 
 app.post('/api/movies/charles', async (req, res) => {
   try {
@@ -128,32 +183,6 @@ app.delete('/api/movies/ryan/:id', async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 });
-
-
-const users = [
-  { id: 1, email: 'cab03@gmail.com', username: 'butler', password: '1234' },
-  { id: 2, email: 'ashley@gmail.com', username: 'ashley', password: 'cheese' }
-];
-
-app.post('/login', (req, res) => {
-  const { email, username, password } = req.body;
-
-  // Placeholder: Simulate user authentication
-  const user = users.find(u => (u.email === email || u.username === username) && u.password === password);
-
-  if (user) {
-      // Placeholder: Generate and return authentication token (JWT token)
-      const authToken = generateAuthToken(user);
-      res.json({ success: true, authToken });
-  } else {
-      res.status(401).json({ success: false, message: 'Invalid email/username or password' });
-  }
-});
-
-function generateAuthToken(user) {
-  // This is just a placeholder, replace it with your actual token generation logic
-  return 'placeholder-auth-token';
-}
 
 app.use((_req, res) => {
   res.sendFile('index.html', { root: 'Public' });
