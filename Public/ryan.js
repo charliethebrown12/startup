@@ -301,7 +301,7 @@ function displaySearchResults(data) {
   
   const savedUsername = sessionStorage.getItem('username');
   
-  if (savedUsername === null) {
+  if (user.token === null) {
     alert("Please Login")
     window.location.href = "index.html";
   }

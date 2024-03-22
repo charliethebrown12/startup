@@ -3,14 +3,14 @@ async function signup() {
     let username = document.getElementById("username").value;
     let password = document.getElementById("userpassword").value;
     try {
-        const response = await fetch('/signup', {
+        const response = await fetch('/auth/create', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ email, username, password })
+            body: JSON.stringify({ email, password })
         });
-        
+
         if (response.ok) {
             alert('Sign up successful! Please log in.');
             window.location.href = `charles.html?username=${encodeURIComponent(username)}`;
@@ -29,14 +29,14 @@ async function login() {
     let username = document.getElementById("username").value;
     let password = document.getElementById("userpassword").value;
     try {
-        const response = await fetch('/login', {
+        const response = await fetch('/auth/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({ email, password })
         });
-        
+
         if (response.ok) {
             window.location.href = `charles.html?username=${encodeURIComponent(username)}`;
             const data = await response.json();
@@ -45,7 +45,7 @@ async function login() {
             localStorage.setItem('authToken', authToken);
             alert('Login successful!');
             // Optionally, redirect to protected page
-            // window.location.href = '/protected.html';
+            window.location.href = '/charles.html';
         } else {
             const data = await response.json();
             alert(data.message);
@@ -86,7 +86,3 @@ function secretMessage() {
     // Access the message at the random index and display it in an alert
     alert(secrets[randomIndex]);
 }
-
-// Event listeners for sign-in and sign-up buttons
-document.querySelector(".btn-outline-warning").addEventListener("click", login);
-document.querySelector(".btn-outline-success").addEventListener("click", signup);

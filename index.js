@@ -1,87 +1,49 @@
 const express = require('express');
+const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const fetch = require('node-fetch');
-const { MongoClient } = require('mongodb');
-const { ObjectId } = require('mongodb');
 const bcrypt = require('bcrypt');
 const uuid = require('uuid');
-const config = require('./dbConfig.json');
+const dbName = require("./database");
 
 const app = express();
+const authCookieName = 'token';
 
 app.use(bodyParser.json());
 app.use(express.static("Public"));
 
 const tmdbApiUrl = 'https://api.themoviedb.org/3/search/multi';
 
-const url = `mongodb+srv://${config.userName}:${config.password}@${config.hostname}/`;
-const client = new MongoClient(url);
-const dbName = 'startup';
-
-app.post('/signup', async (req, res) => {
-  const { email, username, password } = req.body;
-
-  try {
-    // Hash the password
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Check if the email or username is already registered
-    const existingUser = await db.collection('users').findOne({ $or: [{ email }, { username }] });
-    if (existingUser) {
-      return res.status(400).json({ message: 'Email or username already exists' });
-    }
-
-    // Save user to the database
-    await db.collection('users').insertOne({ email, username, password: hashedPassword });
-    res.status(201).json({ message: 'User created successfully' });
-  } catch (error) {
-    console.error('Error signing up user:', error);
-    res.status(500).json({ message: 'Internal server error' });
-  }
-});
-
-// Endpoint for user sign-in
-app.post('/login', async (req, res) => {
-  const { email, password } = req.body;
-
-  try {
-    // Find user by email
-    const user = await db.collection('users').findOne({ email });
-    if (!user) {
-      return res.status(401).json({ message: 'Invalid email or password' });
-    }
-
-    // Check if password is correct
-    const passwordMatch = await bcrypt.compare(password, user.password);
-    if (!passwordMatch) {
-      return res.status(401).json({ message: 'Invalid email or password' });
-    }
-
-    // Generate unique session token using UUID
-    const authToken = uuid.v4();
-
-    // Save session token in the database
-    req.session.sessionId = sessionId;
-    res.cookie('sessionId', sessionId, { httpOnly: true });
-
-    res.json({ success: true, authToken });
-  } catch (error) {
-    console.error('Error logging in user:', error);
-    res.status(500).json({ message: 'Internal server error' });
-  }
-});
-
-// Placeholder: Protect endpoints with authentication middleware
-
-app.get('/check-auth', (req, res) => {
-  // Check if session ID cookie exists
-  if (req.cookies.sessionId && req.session.sessionId === req.cookies.sessionId) {
-    // User is authenticated
-    res.json({ authenticated: true, user: req.session.user });
+app.post('/auth/create', async (req, res) => {
+  if (await dbName.getUser(req.body.email)) {
+    res.status(409).send({ msg: 'Existing user' });
   } else {
-    // User is not authenticated
-    res.json({ authenticated: false });
+    const user = await dbName.createUser(req.body.email, req.body.password);
+
+    // Set the cookie
+    setAuthCookie(res, user.token);
+
+    res.send({
+      id: user._id,
+    });
   }
+});
+
+// GetAuth token for the provided credentials
+app.post('/auth/login', async (req, res) => {
+  const user = await dbName.getUser(req.body.email);
+  if (!user) {
+    return res.status(401).send({ msg: 'User not found' });
+  }
+
+  const passwordMatch = await bcrypt.compare(req.body.password, user.password);
+  if (!passwordMatch) {
+    return res.status(401).send({ msg: 'Incorrect password' });
+  }
+
+  // Authentication successful, set authentication cookie
+  setAuthCookie(res, user.token);
+  res.send({ id: user._id });
 });
 
 app.get('/api/search', async (req, res) => {
@@ -187,6 +149,14 @@ app.delete('/api/movies/ryan/:id', async (req, res) => {
 app.use((_req, res) => {
   res.sendFile('index.html', { root: 'Public' });
 });
+
+function setAuthCookie(res, authToken) {
+  res.cookie(authCookieName, authToken, {
+    secure: true,
+    httpOnly: true,
+    sameSite: 'strict',
+  });
+}
 
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
