@@ -36,7 +36,8 @@ function displaySearchResults(data) {
 function addtoDatabase(movieTitle, overview) {
   const movieData = {
     title: movieTitle,
-    summary: overview
+    summary: overview,
+    token: null,
   };
   fetch('/api/movies/charles', {
     method: 'POST',
@@ -86,7 +87,7 @@ async function renderMovies() {
       <h5 class="card-title">${movie.title}</h5>
       <p class="card-text">${movie.year}</p>
       <p class="card-text overview">${movie.summary}</p>
-      <button class="delete-button" id="${movie.title}">x</button>
+      <button class="delete-button" id="${movie.token}">x</button>
     </div>`;
     moviesContainer.appendChild(cardDiv);
   });
@@ -110,8 +111,6 @@ function createCard(title, releaseYear, overview) {
   document.getElementById("cardContainer").appendChild(cardDiv);
 
   showNotification("New item added: " + title);
-
-  saveCardsToLocalStorage();
 
 }
 
@@ -170,8 +169,6 @@ function searchAndAddContent(event) {
 
   showNotification("New item added: " + searchInput);
 
-  saveCardsToLocalStorage();
-
 }
 
 function secretMessage() {
@@ -204,45 +201,6 @@ function secretMessage() {
   alert(secrets[randomIndex]);
 }
 
-function saveCardsToLocalStorage() {
-  let localStorageKey = "savedCards_" + window.location.pathname;
-
-  let cards = document.querySelectorAll(".card");
-
-  let cardContent = [];
-
-  cards.forEach(function(card) {
-      let title = card.querySelector(".card-title").innerText;
-      let text = card.querySelector(".card-text").innerText;
-      let overview = card.querySelector(".overview").innerText;
-
-      cardContent.push({ title: title, text: text, overview: overview});
-  });
-
-  localStorage.setItem(localStorageKey, JSON.stringify(cardContent));
-}
-
-function displayCardsFromLocalStorage() {
-  let localStorageKey = "savedCards_" + window.location.pathname;
-
-  let savedCards = JSON.parse(localStorage.getItem(localStorageKey));
-
-  if (savedCards) {
-      savedCards.forEach(function(cardData) {
-          let cardDiv = document.createElement("div");
-          cardDiv.classList.add("card", "text-center", "bg-warning", "text-dark", "col-sm");
-          cardDiv.innerHTML = `
-              <div>
-                  <h5 class="card-title">${cardData.title}</h5>
-                  <p class="card-text">${cardData.text}</p>
-                  <p class="card-text overview">${cardData.overview}</p>
-                  <button class="delete-button">x</button>
-              </div>`;
-          document.getElementById("cardContainer").appendChild(cardDiv);
-      });
-  }
-}
-
 async function deleteCardFromDatabase(movieId) {
   try {
     const response = await fetch(`/api/movies/charles/${movieId}`, {
@@ -257,34 +215,10 @@ async function deleteCardFromDatabase(movieId) {
   }
 }
 
-
-function removeCardDataFromLocalStorage(cardElement) {
-  let localStorageKey = "savedCards_" + window.location.pathname;
-
-  let cardTitle = cardElement.querySelector(".card-title").innerText;
-
-  let savedCards = JSON.parse(localStorage.getItem(localStorageKey));
-
-  if (savedCards) {
-    let cardTitle = cardElement.querySelector(".card-title").innerText;
-      // Find the index of the card with the matching title
-      let index = savedCards.findIndex(card => card.title === cardTitle);
-
-      if (index !== -1) {
-          // Remove the card data from the savedCards array
-          savedCards.splice(index, 1);
-
-          localStorage.setItem(localStorageKey, JSON.stringify(savedCards));
-      }
-  }
-}
-
 function deleteCard(cardElement) {
   if (cardElement && cardElement.parentNode) {
 
     cardElement.parentNode.removeChild(cardElement);
-
-      removeCardDataFromLocalStorage(cardElement);
   }
 }
 
@@ -301,16 +235,8 @@ document.addEventListener("click", function(event) {
 
 const savedUsername = sessionStorage.getItem('username');
 
-if (user.token === null) {
-  alert("Please Login")
-  window.location.href = "index.html";
-}
-
 document.querySelectorAll(".yourusername").forEach(element => {
     element.textContent = "Welcome " + savedUsername;
 });
-
-
-window.addEventListener("load", displayCardsFromLocalStorage);
 
 window.addEventListener('load', renderMovies);

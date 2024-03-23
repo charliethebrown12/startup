@@ -48,7 +48,7 @@ async function login() {
             window.location.href = '/charles.html';
         } else {
             const data = await response.json();
-            alert(data.message);
+            alert("Incorrect Login Information. Please Try Again.");
         }
     } catch (error) {
         console.error('Error logging in:', error);

@@ -69,81 +69,33 @@ const options = {
 });
 
 app.post('/api/movies/charles', async (req, res) => {
-  try {
-    const movieData = req.body;
-    const collection = db.collection('charles');
-    const result = await collection.insertOne(movieData);
-    res.status(201).json({ message: 'Movie added successfully', id: result.insertedId });
-  } catch (error) {
-    console.error('Error adding movie to database:', error);
-    res.status(500).json({ message: 'Internal server error' });
-  }
+  msg = await dbName.addMovieCharles(req, res);
+  res.send(msg);
 });
 
 app.get('/api/movies/charles', async (req, res) => {
-  try {
-    const collection = db.collection('charles');
-    const movies = await collection.find({}).toArray();
-    res.json(movies);
-  } catch (error) {
-    console.error('Error fetching movies from database:', error);
-    res.status(500).json({ message: 'Internal server error' });
-  }
+  movies = await dbName.retrieveMovieCharles(req, res);
+  res.send(movies);
 });
 
 app.delete('/api/movies/charles/:id', async (req, res) => {
   const movieId = req.params.id;
-  try {
-    const collection = db.collection('charles');
-    const result = await collection.deleteOne({ title: movieId });
-    if (result.deletedCount === 1) {
-      res.status(200).json({ message: 'Movie deleted successfully' });
-    } else {
-      res.status(404).json({ message: 'Movie not found' });
-    }
-  } catch (error) {
-    console.error('Error deleting movie:', error);
-    res.status(500).json({ message: 'Internal server error' });
-  }
+  dbName.deleteMovieCharles(req, res, movieId);
 });
 
 app.post('/api/movies/ryan', async (req, res) => {
-  try {
-    const movieData = req.body;
-    const collection = db.collection('ryan');
-    const result = await collection.insertOne(movieData);
-    res.status(201).json({ message: 'Movie added successfully', id: result.insertedId });
-  } catch (error) {
-    console.error('Error adding movie to database:', error);
-    res.status(500).json({ message: 'Internal server error' });
-  }
+  msg = await dbName.addMovieRyan(req, res);
+  res.send(msg);
 });
 
 app.get('/api/movies/ryan', async (req, res) => {
-  try {
-    const collection = db.collection('ryan');
-    const movies = await collection.find({}).toArray();
-    res.json(movies);
-  } catch (error) {
-    console.error('Error fetching movies from database:', error);
-    res.status(500).json({ message: 'Internal server error' });
-  }
+  movies = await dbName.retrieveMovieRyan(req, res);
+  res.send(movies);
 });
 
 app.delete('/api/movies/ryan/:id', async (req, res) => {
   const movieId = req.params.id;
-  try {
-    const collection = db.collection('ryan');
-    const result = await collection.deleteOne({ title: movieId });
-    if (result.deletedCount === 1) {
-      res.status(200).json({ message: 'Movie deleted successfully' });
-    } else {
-      res.status(404).json({ message: 'Movie not found' });
-    }
-  } catch (error) {
-    console.error('Error deleting movie:', error);
-    res.status(500).json({ message: 'Internal server error' });
-  }
+  dbName.deleteMovieRyan(req, res, movieId);
 });
 
 app.use((_req, res) => {
