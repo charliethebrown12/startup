@@ -80,3 +80,14 @@ For this deliverable, I added backend endpoints that call information for the se
 - **Calls to third-party endpoints** - calls the MovieDB API to get results using the information entered into the search bar
 - **Backend service endpoints** - Placeholders for login information that stores the current user on the server
 - **Frontend calls service endpoints** - I did this using the fetch function
+
+### DB/Login Deliverable
+
+For this deliverable I create login infrastructure through MongoDB as well as the requests being handled through MongoDB so all users can see what has been requested.
+
+MongoDB Atlas database created - Completed!
+Stores data in MongoDB - Completed!
+User registration - Creates a new account in the database.
+Existing User - Allows login functionality with the signin button when user is created
+Use MongoDB to store credentials - stores both the user information and the requests information for each of the pages
+Restricts functionality - Sadly no
