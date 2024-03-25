@@ -5,6 +5,7 @@ const fetch = require('node-fetch');
 const bcrypt = require('bcrypt');
 const uuid = require('uuid');
 const dbName = require("./database");
+const config = require('./dbConfig.json');
 
 const app = express();
 const authCookieName = 'token';
@@ -53,7 +54,7 @@ const options = {
   method: 'GET',
   headers: {
     accept: 'application/json',
-    Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkNmI3NTBhMzNlZGIxYzk4YTMyY2QwN2MzZjBiY2VlYSIsInN1YiI6IjY1ZTRhYmE2OWVlMGVmMDE2MjZmOTlhYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.YHuoKQKx58uyOuKVm6HQqtkwnDpdveBskk2GG2M9KwU'
+    Authorization: config.bearer
   }
 }
 
