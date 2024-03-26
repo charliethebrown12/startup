@@ -138,6 +138,23 @@ document.getElementById('button-addon2').addEventListener('click', async functio
   }
 });
 
+const socket = new WebSocket(`ws://${window.location.hostname}:${window.location.port}`);
+
+socket.onopen = function() {
+    console.log('WebSocket connection established');
+};
+
+socket.onmessage = function(event) {
+    const data = JSON.parse(event.data);
+    if (data.type === 'notification') {
+        showNotification(data.message);
+    }
+};
+
+socket.onclose = function() {
+    console.log('WebSocket connection closed');
+};
+
 function showNotification(message) {
   let notificationBar = document.getElementById("notificationBar");
   notificationBar.innerText = message;
