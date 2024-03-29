@@ -85,9 +85,18 @@ For this deliverable, I added backend endpoints that call information for the se
 
 For this deliverable I create login infrastructure through MongoDB as well as the requests being handled through MongoDB so all users can see what has been requested.
 
-MongoDB Atlas database created - Completed!
-Stores data in MongoDB - Completed!
-User registration - Creates a new account in the database.
-Existing User - Allows login functionality with the signin button when user is created
-Use MongoDB to store credentials - stores both the user information and the requests information for each of the pages
-Restricts functionality - Sadly no
+**MongoDB Atlas database created** - Completed!
+**Stores data in MongoDB** - Completed!
+**User registration** - Creates a new account in the database.
+**Existing User** - Allows login functionality with the signin button when user is created
+**Use MongoDB to store credentials** - stores both the user information and the requests information for each of the pages
+**Restricts functionality** - Sadly no
+
+### WebSocket Deliverable
+
+For this deliverable I used WebSocket to push notifications of new movies added to the page in real time!
+
+**Backend listens for WebSocket connection** - Yes!
+**Frontend makes WebSocket connection** - Yes!
+**Data sent over WebSocket connection** - Yes!
+**WebSocket data displayed** - Notifications are displayed in real time with the information of what movie was added.
