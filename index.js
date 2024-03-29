@@ -6,28 +6,23 @@ const bcrypt = require('bcrypt');
 const uuid = require('uuid');
 const dbName = require("./database");
 const config = require('./dbConfig.json');
-const { WebSocketServer } = require('ws');
+const { peerProxy } = require('./peerProxy.js');
 
 const app = express();
-const server = http.createServer(app);
-const authCookieName = 'token';
+const port = process.argv.length > 2 ? process.argv[2] : 5000;
 
 app.use(bodyParser.json());
 app.use(express.static("Public"));
 
 const tmdbApiUrl = 'https://api.themoviedb.org/3/search/multi';
 
-const wss = new WebSocketServer({ noServer: true });
-
-server.on('upgrade', (request, socket, head) => {
-  wss.handleUpgrade(request, socket, head, function done(ws) {
-      wss.emit('connection', ws, request);
+function setAuthCookie(res, authToken) {
+  res.cookie(authCookieName, authToken, {
+    secure: true,
+    httpOnly: true,
+    sameSite: 'strict',
   });
-});
-
-wss.on('connection', (ws) => {
-  console.log('WebSocket client connected');
-});
+}
 
 app.post('/auth/create', async (req, res) => {
   if (await dbName.getUser(req.body.email)) {
@@ -85,13 +80,6 @@ const options = {
 
 app.post('/api/movies/charles', async (req, res) => {
   const msg = await dbName.addMovieCharles(req, res);
-
-  wss.clients.forEach(client => {
-    if (client.readyState === WebSocket.OPEN) {
-        client.send(JSON.stringify({ type: 'notification', message: 'New movie added!' }));
-    }
-});
-
   res.send(msg);
 });
 
@@ -107,13 +95,6 @@ app.delete('/api/movies/charles/:id', async (req, res) => {
 
 app.post('/api/movies/ryan', async (req, res) => {
   const msg = await dbName.addMovieRyan(req, res);
-
-  wss.clients.forEach(client => {
-    if (client.readyState === WebSocket.OPEN) {
-        client.send(JSON.stringify({ type: 'notification', message: 'New movie added!' }));
-    }
-});
-
   res.send(msg);
 });
 
@@ -131,15 +112,8 @@ app.use((_req, res) => {
   res.sendFile('index.html', { root: 'Public' });
 });
 
-function setAuthCookie(res, authToken) {
-  res.cookie(authCookieName, authToken, {
-    secure: true,
-    httpOnly: true,
-    sameSite: 'strict',
-  });
-}
-
-const PORT = process.env.PORT || 4000;
-server.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+const httpService = app.listen(port, () => {
+  console.log(`Listening on port ${port}`);
 });
+
+peerProxy(httpService);

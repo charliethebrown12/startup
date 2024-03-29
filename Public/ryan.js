@@ -22,10 +22,10 @@ function displaySearchResults(data) {
         const selectedIndex = this.selectedIndex;
         const selectedResult = searchResults[selectedIndex]; // Adjust index for default option
         const title = selectedResult.label || selectedResult.name;
-        const releaseYear = selectedResult.release_date ? new Date(selectedResult.release_date).getFullYear() : '' || selectedResult.first_air_date ? new Date(selectedResult.first_air_date).getFullYear() : '';
         const overview = selectedResult.overview;
         addtoDatabase(title, overview);
-      createCard(title, releaseYear, overview);
+      createCard(title, overview);
+      handleWebSocketMessage(title);
       this.style.display = 'none';
       this.innerHTML = '';
       document.getElementById('searchInput').value = ''; // Clear search input
@@ -85,7 +85,6 @@ async function renderMovies() {
     cardDiv.innerHTML = `
     <div>
       <h5 class="card-title">${movie.title}</h5>
-      <p class="card-text">${movie.year}</p>
       <p class="card-text overview">${movie.summary}</p>
       <button class="delete-button" id="${movie.token}">x</button>
     </div>`;
@@ -94,7 +93,7 @@ async function renderMovies() {
 }
 
 
-function createCard(title, releaseYear, overview) {
+function createCard(title, overview) {
   const cardContainer = document.getElementById("cardContainer");
 
   let cardDiv = document.createElement("div");
@@ -103,7 +102,6 @@ function createCard(title, releaseYear, overview) {
   cardDiv.innerHTML = `
     <div>
       <h5 class="card-title">${title}</h5>
-      <p class="card-text">${releaseYear}</p>
       <p class="card-text overview">${overview}</p>
       <button class="delete-button">x</button>
     </div>`;
@@ -138,26 +136,28 @@ document.getElementById('button-addon2').addEventListener('click', async functio
   }
 });
 
-const socket = new WebSocket('ws://localhost:4000');
+function handleWebSocketMessage(event) {
+  showNotification(event);
+}
 
-socket.onopen = (event) => {
+function configureWebSocket() {
+  const protocol = window.location.protocol === 'http:' ? 'ws' : 'wss';
+  this.socket = new WebSocket(`${protocol}://${window.location.host}/ws`);
+  this.socket.onopen = (event) => {
     console.log('WebSocket connection established');
 };
-
-socket.onmessage = function(event) {
-    const data = JSON.parse(event.data);
-    if (data.type === 'notification') {
-        showNotification(data.message);
-    }
+this.socket.onclose = function() {
+  console.log('WebSocket connection closed');
 };
-
-socket.onclose = function() {
-    console.log('WebSocket connection closed');
+this.socket.onmessage = function(event) {
+  const data = JSON.parse(event.data);
+  handleWebSocketMessage(data);
+};
 };
 
 function showNotification(message) {
   let notificationBar = document.getElementById("notificationBar");
-  notificationBar.innerText = message;
+  notificationBar.innerText = `${message} was just added!`;
   notificationBar.style.display = "block";
 
 
@@ -183,8 +183,6 @@ function searchAndAddContent(event) {
       </div>`;
 
   document.getElementById("cardContainer").appendChild(cardDiv);
-
-  showNotification("New item added: " + searchInput);
 
 }
 
@@ -257,3 +255,5 @@ document.querySelectorAll(".yourusername").forEach(element => {
 });
 
 window.addEventListener('load', renderMovies);
+
+configureWebSocket();
