@@ -14,6 +14,8 @@ const port = process.argv.length > 2 ? process.argv[2] : 5000;
 app.use(bodyParser.json());
 app.use(express.static("Public"));
 
+const authCookieName = 'token';
+
 const tmdbApiUrl = 'https://api.themoviedb.org/3/search/multi';
 
 function setAuthCookie(res, authToken) {

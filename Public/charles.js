@@ -246,12 +246,6 @@ document.addEventListener("click", function(event) {
   }
 });
 
-const savedUsername = sessionStorage.getItem('username');
-
-document.querySelectorAll(".yourusername").forEach(element => {
-    element.textContent = "Welcome " + savedUsername;
-});
-
 window.addEventListener('load', renderMovies);
 
 configureWebSocket();
