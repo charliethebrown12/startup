@@ -1,8 +1,13 @@
 import React from 'react';
 import './styles.css'; // Import your custom CSS file
+import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
+import { Login } from './login/login';
+import { Charles } from './charles/charles';
+import { Ryan } from './ryan/ryan';
 
-export default function App() {
-    return (
+function App() {
+    return(
+  <BrowserRouter>
         <>
         <div className='body'>
             <header>
@@ -11,41 +16,31 @@ export default function App() {
                         <ul className="navbar-nav">
                             <li className="nav-item"><img alt="Plex Logo" src="https://i.redd.it/5x93lknmuaw81.jpg" width="50" height="50" className="plex" /></li>
                             <li className="nav-item"><h2><a id="secret" onClick={secretMessage} style={{ color: '#E4A11B' }} href="#" className="nav-link heading">Media Request Login</a></h2></li>
-                            <li className="nav-item"><a href="charles.html" className="nav-link text-white">Charles' Server</a></li>
-                            <li className="nav-item"><a href="ryan.html" className="nav-link text-white">Ryan's Server</a></li>
+      <li><NavLink className='nav-link text-white' to='/charles'>
+        Charles' Server
+      </NavLink>
+      </li>
+      <li><NavLink className='nav-link text-white' to='/ryan'>
+        Ryan's Server
+      </NavLink>
+      </li>
                         </ul>
                     </div>
                 </nav>
             </header>
-            <div className="bd-example">
-                <div>
-                    <form className="px-4 py-3">
-                        <div className="mb-3">
-                            <label className="form-label text-white">Email address</label>
-                            <input id="useremail" type="email" className="form-control" placeholder="email@example.com" />
-                        </div>
-                        <div className="mb-3">
-                            <label className="form-label text-white">Username</label>
-                            <input id="username" type="text" className="form-control" placeholder="Username" />
-                        </div>
-                        <div className="mb-3">
-                            <label className="form-label text-white">Password</label>
-                            <input id="userpassword" type="password" className="form-control" placeholder="Password" />
-                        </div>
-                        <button onClick={login} type="button" className="btn btn-outline-warning text-white">Sign In</button>
-                    </form>
-                    <div></div>
-                    <button onClick={signup} type="button" className="btn btn-outline-success text-white">Sign Up</button>
-                </div>
-            </div>
-            <br />
+            <Routes>
+  <Route path='/' element={<Login />} exact />
+  <Route path='/charles' element={<Charles />} />
+  <Route path='/ryan' element={<Ryan />} />
+  <Route path='*' element={<NotFound />} />
+</Routes>
             <footer>
                 <a className="github" href="https://github.com/charliethebrown12/startup">Github</a>
             </footer>
             </div>
         </>
-    );
-}
+        </BrowserRouter>
+    )};
 
 // Define your functions here
 function secretMessage() {
@@ -136,3 +131,9 @@ async function signup() {
         alert('An error occurred. Please try again.');
     }
 }
+
+function NotFound() {
+    return <main className='container-fluid bg-secondary text-center'>404: Return to sender. Address unknown.</main>;
+  }
+
+export default App;

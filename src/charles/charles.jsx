@@ -1,4 +1,14 @@
-function displaySearchResults(data) {
+import React from 'react';
+
+export function Charles() {
+  return (
+    <main className='container-fluid bg-secondary text-center'>
+      <div>charles displayed here</div>
+    </main>
+  );
+}
+
+/* function displaySearchResults(data) {
   const searchResultsSelect = document.getElementById('searchResults');
   searchResultsSelect.style.display = 'block';
   searchResultsSelect.innerHTML = '<option value="">Select an option</option>'; // Add a default option
@@ -248,4 +258,4 @@ document.addEventListener("click", function(event) {
 
 window.addEventListener('load', renderMovies);
 
-configureWebSocket();
+configureWebSocket(); */
