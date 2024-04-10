@@ -1,9 +1,35 @@
 import React from 'react';
+import '../styles.css'; // Import your custom CSS file
 
 export function Charles() {
+    const [data, setData] = React.useState([]); 
+
+    React.useEffect(() => {
+        // ComponentDidMount equivalent
+        renderMovies();
+    }, []);
+    
   return (
-    <main className='container-fluid bg-secondary text-center'>
-      <div>charles displayed here</div>
+    <main className='body'>
+          <br />
+    <div className="container body">
+        <div className="row justify-content-center">
+          <div className="col-md-6">
+            <form>
+              <div className="input-group mb-3">
+                <input id="searchInput" type="text" className="form-control" placeholder="Search for TV shows and Movies to add" aria-label="Search" aria-describedby="button-addon2" />
+                <select id="searchResults"></select>
+                <button className="btn btn-outline-primary" type="search" id="button-addon2">Search</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    <div id="cardContainer" className="container">
+            {data.map(item => (
+                <div key={item.id}>{item.name}</div>
+            ))}</div>  
+    <div id="notificationBar" className="notification-bar">Notification message</div>
     </main>
   );
 }
@@ -72,7 +98,7 @@ function addtoDatabase(movieTitle, overview) {
   });
 }
 
-async function fetchMovies() {
+*/ async function fetchMovies() {
   try {
     const response = await fetch('/api/movies/charles');
     if (!response.ok) {
@@ -103,7 +129,7 @@ async function renderMovies() {
   });
 }
 
-
+/*
 function createCard(title, overview) {
   const cardContainer = document.getElementById("cardContainer");
 

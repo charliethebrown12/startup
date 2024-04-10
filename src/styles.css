@@ -85,3 +85,7 @@ footer {
 .card:hover .delete-button {
     visibility: visible; /* Or opacity: 1; */
 }
+
+#searchResults {
+    display: none
+}
