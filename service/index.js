@@ -27,6 +27,7 @@ function setAuthCookie(res, authToken) {
 }
 
 app.post('/auth/create', async (req, res) => {
+  console.log("Connected to create endpoint")
   if (await dbName.getUser(req.body.email)) {
     res.status(409).send({ msg: 'Existing user' });
   } else {
@@ -43,6 +44,7 @@ app.post('/auth/create', async (req, res) => {
 
 // GetAuth token for the provided credentials
 app.post('/auth/login', async (req, res) => {
+  console.log("Connected to login endpoint")
   const user = await dbName.getUser(req.body.email);
   if (!user) {
     return res.status(401).send({ msg: 'User not found' });

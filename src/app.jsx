@@ -74,64 +74,6 @@ function secretMessage() {
     alert(secrets[randomIndex]);
 }
 
-async function login() {
-    let email = document.getElementById("useremail").value;
-    let username = document.getElementById("username").value;
-    let password = document.getElementById("userpassword").value;
-    try {
-        const response = await fetch('/auth/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ email, password })
-        });
-
-        if (response.ok) {
-            window.location.href = `charles.html?username=${encodeURIComponent(username)}`;
-            const data = await response.json();
-            const authToken = data.authToken;
-            // Save authToken to localStorage or session storage
-            localStorage.setItem('authToken', authToken);
-            alert('Login successful!');
-            // Optionally, redirect to protected page
-            window.location.href = '/charles.html';
-        } else {
-            const data = await response.json();
-            alert("Incorrect Login Information. Please Try Again.");
-        }
-    } catch (error) {
-        console.error('Error logging in:', error);
-        alert('An error occurred. Please try again.');
-    }
-}
-
-async function signup() {
-    let email = document.getElementById("useremail").value;
-    let username = document.getElementById("username").value;
-    let password = document.getElementById("userpassword").value;
-    try {
-        const response = await fetch('/auth/create', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ email, password })
-        });
-
-        if (response.ok) {
-            alert('Sign up successful! Please log in.');
-            window.location.href = `charles.html?username=${encodeURIComponent(username)}`;
-        } else {
-            const data = await response.json();
-            alert(data.message);
-        }
-    } catch (error) {
-        console.error('Error signing up:', error);
-        alert('An error occurred. Please try again.');
-    }
-}
-
 function NotFound() {
     return <main className='container-fluid bg-secondary text-center'>404: Return to sender. Address unknown.</main>;
   }
