@@ -2,8 +2,23 @@ import React from 'react';
 
 export function Ryan() {
   return (
-    <main className='container-fluid bg-secondary text-center'>
-      <div>ryan displayed here</div>
+    <main className='body'>
+          <br />
+    <div className="container">
+        <div className="row justify-content-center">
+          <div className="col-md-6">
+            <form>
+              <div className="input-group mb-3">
+                <input id="searchInput" type="text" className="form-control" placeholder="Search for TV shows and Movies to add" aria-label="Search" aria-describedby="button-addon2" />
+                <select id="searchResults"></select>
+                <button className="btn btn-outline-primary" type="search" id="button-addon2">Search</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div id="cardContainer" className="container"></div>
+      <div id="notificationBar" className="notification-bar">Notification message</div>
     </main>
   );
 }

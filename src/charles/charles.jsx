@@ -2,17 +2,47 @@ import React from 'react';
 import '../styles.css'; // Import your custom CSS file
 
 export function Charles() {
-    const [data, setData] = React.useState([]); 
+    const [data, setData] = React.useState([]);
 
     React.useEffect(() => {
-        // ComponentDidMount equivalent
-        renderMovies();
+        const moviesContainer = document.getElementById('cardContainer');
+
+        async function renderMovies() {
+        const movies = await fetchMovies();
+        movies.forEach(movie => {
+          let cardDiv = document.createElement("div");
+          cardDiv.classList.add("card", "text-center", "bg-warning", "text-dark", "col-sm");
+          cardDiv.innerHTML = `
+          <div>
+            <h5 class="card-title">${movie.title}</h5>
+            <p class="card-text overview">${movie.summary}</p>
+            <button class="delete-button" id="${movie.token}">x</button>
+          </div>`;
+          moviesContainer.appendChild(cardDiv);
+        })
+    }
+    async function fetchMovies() { 
+        try {
+          const response = await fetch('/api/movies/charles');
+          if (!response.ok) {
+            throw new Error('Failed to fetch movies');
+          }
+          const movies = await response.json();
+          return movies;
+        } catch (error) {
+          console.error('Error fetching movies:', error);
+          return [];
+        }
+      }
+
+      renderMovies();
     }, []);
+
     
   return (
     <main className='body'>
           <br />
-    <div className="container body">
+    <div className="container">
         <div className="row justify-content-center">
           <div className="col-md-6">
             <form>
@@ -95,37 +125,6 @@ function addtoDatabase(movieTitle, overview) {
   .catch(error => {
     console.error('Error adding movie:', error);
     // Handle error
-  });
-}
-
-*/ async function fetchMovies() {
-  try {
-    const response = await fetch('/api/movies/charles');
-    if (!response.ok) {
-      throw new Error('Failed to fetch movies');
-    }
-    const movies = await response.json();
-    return movies;
-  } catch (error) {
-    console.error('Error fetching movies:', error);
-    return [];
-  }
-}
-
-// Render movies on the page
-async function renderMovies() {
-  const moviesContainer = document.getElementById('cardContainer');
-  const movies = await fetchMovies();
-  movies.forEach(movie => {
-    let cardDiv = document.createElement("div");
-    cardDiv.classList.add("card", "text-center", "bg-warning", "text-dark", "col-sm");
-    cardDiv.innerHTML = `
-    <div>
-      <h5 class="card-title">${movie.title}</h5>
-      <p class="card-text overview">${movie.summary}</p>
-      <button class="delete-button" id="${movie.token}">x</button>
-    </div>`;
-    moviesContainer.appendChild(cardDiv);
   });
 }
 
