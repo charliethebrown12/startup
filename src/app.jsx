@@ -14,7 +14,7 @@ function App() {
                 <nav className="navbar navbar-expand-sm bg-black navbar-dark">
                     <div className="container-fluid">
                         <ul className="navbar-nav">
-                            <li className="nav-item"><img alt="Plex Logo" src="https://i.redd.it/5x93lknmuaw81.jpg" width="50" height="50" className="plex" /></li>
+                            <li><NavLink className="nav-item" to="/"><img alt="Plex Logo" src="https://i.redd.it/5x93lknmuaw81.jpg" width="50" height="50" className="plex" /></NavLink></li>
                             <li className="nav-item"><h2><a id="secret" onClick={secretMessage} style={{ color: '#E4A11B' }} href="#" className="nav-link heading">Media Request Login</a></h2></li>
       <li><NavLink className='nav-link text-white' to='/charles'>
         Charles' Server

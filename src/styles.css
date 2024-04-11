@@ -89,3 +89,7 @@ footer {
 #searchResults {
     display: none
 }
+
+.form-label {
+    left: 25px;
+}
