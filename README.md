@@ -100,3 +100,12 @@ For this deliverable I used WebSocket to push notifications of new movies added 
 **Frontend makes WebSocket connection** - Yes!
 **Data sent over WebSocket connection** - Yes!
 **WebSocket data displayed** - Notifications are displayed in real time with the information of what movie was added.
+
+### React Deliverable
+
+For this deliverable I converted the entire application over to React and deployed it so it has the same functionality as before.
+
+**Bundled and transpiled** - Completed
+**Components** - Rendering the movies that are already in the database are coomponents for both the Charles and Ryan pages and have different calls to work
+**Router** - Router routes between the different pages of the application
+**Hooks** - UseState and UseEffect are both used to track changes in the cards displayed on the Charles and Ryan pages.
